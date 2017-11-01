@@ -64,7 +64,7 @@ class Song(db.Model):
     genre = db.Column(db.String(64))
 
     def __repr__(self):
-        return "{} by {} | {}".format(self.title,self.artist, self.genre)
+        return "{} by Artist id {} | {}".format(self.title,self.artist_id, self.genre)
 
 ##### Set up Forms #####
 
@@ -186,9 +186,9 @@ def group4():
 
 @app.route('/group5')
 def group5():
-    artist_beethoven = Artist.query.filter_by(name="Beethoven") # If there's no such artist, what's gonna happen? Try and find out! -- What might you want to change in the template to handle different situations?
-    songs_beethoven = Song.query.filter_by(artist_id=artist_beethoven.id)
-    return render_template('beethoven_songs.html',songs_beethoven=songs_beethoven)
+    artist_beethoven = Artist.query.filter_by(name="Beethoven").first() # If there's no such artist, what's gonna happen? Try and find out! -- What might you want to change in the template to handle different situations?
+    songs_beethoven = Song.query.filter_by(artist_id=artist_beethoven.id).all()
+    return render_template('songs_beethoven.html',songs_beethoven=songs_beethoven)
 
 if __name__ == '__main__':
     db.create_all()
