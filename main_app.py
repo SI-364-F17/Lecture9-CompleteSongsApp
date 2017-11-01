@@ -163,11 +163,13 @@ def see_all_artists():
 @app.route('/group1')
 def group1():
     all_albums = Album.query.all()
+    # SQL: SELECT * FROM Album;
     return render_template('all_albums.html',albums=all_albums)
 
 @app.route('/group2')
 def group2():
     songs_Rock = Song.query.filter_by(genre="Rock")
+    # SQL: SELECT * FROM Song WHERE genre='Rock';
     return render_template('rock_songs.html',rock_songs=songs_Rock)
 
 @app.route('/group3')
@@ -176,11 +178,13 @@ def group3():
     for al in Album.query.all():
         for artist in al.artists:
             artists_albums.append(al.name, artist.name)
+    # SELECT * FROM Album;
     return render_template('artist_albums.html',artists_and_albums=artists_albums)
 
 @app.route('/group4')
 def group4():
     songs_shakira = Song.query.filter_by(artist_id=get_or_create_artist(db.session,"Shakira").id) # n.b. Careful -- for now, everything's case-sensitive for equality!
+    # SQL: SELECT * FROM Song WHERE artist_id=(SELECT id FROM Artist WHERE Artist.name='Shakira'); # subquery -- complicated in SQL
     names = [s.title for s in songs_shakira]
     return render_template('shakira_songs.html',song_names=names)
 
@@ -189,6 +193,8 @@ def group5():
     artist_beethoven = Artist.query.filter_by(name="Beethoven").first() # If there's no such artist, what's gonna happen? Try and find out! -- What might you want to change in the template to handle different situations?
     songs_beethoven = Song.query.filter_by(artist_id=artist_beethoven.id).all()
     return render_template('songs_beethoven.html',songs_beethoven=songs_beethoven)
+    # SQL: SELECT * FROM Artist WHERE name='Beethoven';
+    # SQL: SELECT * FROM Song WHERE artist_id=6; # could also do with subquery, but SQLAlchemy makes this way easier!
 
 if __name__ == '__main__':
     db.create_all()
